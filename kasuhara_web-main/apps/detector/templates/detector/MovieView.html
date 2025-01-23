@@ -1,0 +1,23 @@
+{% extends "detector/base.html" %}
+
+{% block content %}
+    <h1>動画詳細</h1>
+
+    <!-- 日付と警告度の表示 -->
+    <div>
+        <p><strong>撮影日:</strong> {{ movie.kasuhara_day.strftime('%Y-%m-%d') }}</p>
+        <p><strong>警告レベル:</strong> {{ movie.warning_level }}</p>
+    </div>
+
+    <!-- 映像の再生 -->
+    <div>
+        <p><strong>動画:</strong></p>
+        <video width="600" controls>
+            <source src="{{ movie.movie_pass }}" type="video/mp4">
+            動画タグに対応していません。
+        </video>
+    </div>
+
+    <!-- 履歴に戻るリンク -->
+    <a href="{{ url_for('detector.HistoryTop') }}">履歴に戻る</a>
+{% endblock %}

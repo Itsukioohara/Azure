@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ shop.name }} - 編集</title>
+    <style>
+        /* 基本的なページ設定 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* header のスタイル */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between; /* タイトルとログアウトボタンを左右に配置 */
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* タイトルの設定 */
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        /* ログアウトボタン */
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* メインコンテンツエリア */
+        .shop-edit {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* フォームの入力項目 */
+        label {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input[type="text"], input[type="checkbox"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* リンク */
+        a {
+            font-size: 1.1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .btn-link:hover {
+            color: #0056b3;
+            text-decoration: none; /* ホバー時の下線を削除 */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>{{ shop.name }} の編集</h1>
+            <form action="{{ url_for('auth_web.user_login') }}" method="post" novalidate="novalidate">
+                <button type="submit" class="logout-btn">ログアウト</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="shop-edit">
+            <form method="post" action="{{ url_for('crud.edit_shop', shop_id=shop.shop_id) }}">
+                <label>店舗名</label>
+                <input type="text" name="name" value="{{ shop.name }}"><br>
+
+                <label>住所</label>
+                <input type="text" name="address" value="{{ shop.address }}"><br>
+
+                <label>電話番号</label>
+                <input type="text" name="tel" value="{{ shop.tel }}"><br>
+
+                <label>削除フラグ</label>
+                <input type="checkbox" name="delete_flag" {% if shop.delete_flag %}checked{% endif %}><br>
+
+                <button type="submit">更新</button>
+            </form>
+            <br>
+            <a href="{{ url_for('crud.shop_list') }}" class="btn-link">店舗一覧画面へ</a>
+        </section>
+    </div>
+</body>
+</html>

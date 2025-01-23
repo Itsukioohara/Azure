@@ -1,0 +1,12 @@
+{% extends "auth_web/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>ようこそカウンター専用カスタマーハラスメント対策アプリへ</h1>
+    <p>以下のリンクからログインしてください。</p>
+    <div>
+        <a href="{{ url_for('LoginUserView') }}" class="btn btn-primary">ユーザーログイン</a>
+        <a href="{{ url_for('LoginShopView') }}" class="btn btn-secondary">店舗ログイン</a>
+    </div>
+</div>
+{% endblock %}
