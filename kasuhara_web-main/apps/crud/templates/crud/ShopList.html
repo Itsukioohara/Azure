@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店舗一覧</title>
+    <style>
+        /* 基本的なページ設定 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 20px;
+            width: 90%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* header のスタイル */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between; /* タイトルとログアウトボタンを左右に配置 */
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        /* タイトルの設定 */
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        /* ログアウトボタン */
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px; /* 角を丸くする */
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* メインコンテンツエリア */
+        .shop-list {
+            margin-top: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .input-group input {
+            max-width: 300px;
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 8px; /* 角を丸くする */
+        }
+
+        .input-group div {
+            margin-right: 15px;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px; /* 角を丸くする */
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 8px 16px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px; /* 角を丸くする */
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-link {
+            font-size: 1.1rem;
+            color: #007bff;
+            text-decoration: none; /* 下線を削除 */
+        }
+
+        .btn-link:hover {
+            color: #0056b3;
+            text-decoration: none; /* ホバー時の下線を削除 */
+        }
+
+        /* テーブルのカスタマイズ */
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            color: black; /* フォントの色を常に黒に */
+        }
+
+        th {
+            background-color: #f1f1f1;
+        }
+
+        /* リンクのフォント色を常に黒に */
+        a {
+            color: black;
+            text-decoration: none; /* 下線を削除 */
+        }
+
+        a:hover {
+            color: #007bff; /* リンクのホバー時に青色 */
+            text-decoration: none; /* ホバー時の下線を削除 */
+        }
+
+        /* 取り消し線のスタイル */
+        a[style*="text-decoration: line-through"] {
+            color: #6c757d;
+        }
+
+        /* ログアウトボタンの中央揃え */
+        .logout-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* 店舗追加ボタンと店舗名の下線を取り除く */
+        .btn-success {
+            text-decoration: none; /* 店舗追加ボタンの下線を削除 */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>店舗一覧</h1>
+            <form action="{{ url_for('auth_web.user_login') }}" method="post" novalidate="novalidate" class="logout-form">
+                <button type="submit" class="logout-btn">ログアウト</button>
+            </form>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="shop-list mt-4">
+            <form method="GET" action="{{ url_for('crud.shop_list') }}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="query" placeholder="検索" required>
+                    <!-- 検索条件のラジオボタン -->
+                    <div>
+                        <label>
+                            <input type="radio" name="filter" value="name" checked> 店舗名
+                        </label>
+                        <label>
+                            <input type="radio" name="filter" value="address"> 住所
+                        </label>
+                        <label>
+                            <input type="radio" name="filter" value="tel"> 電話番号
+                        </label>
+                    </div>
+                    <button type="submit">検索</button>
+                </div>
+            </form>
+
+            <a href="{{ url_for('crud.add_shop') }}" class="btn-success mb-3">店舗追加</a>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>店舗名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for shop in shops %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('crud.edit_shop', shop_id=shop.shop_id) }}" 
+                                   style="{% if shop.delete_flag %}text-decoration: line-through;{% endif %}">
+                                   {{ shop.name }}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <br>
+            <a href="{{ url_for('crud.user_list') }}" class="btn-link">ユーザー一覧画面へ</a>
+            <br>
+        </section>
+    </div>
+</body>
+</html>

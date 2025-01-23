@@ -1,0 +1,130 @@
+{% extends "auth_web/base.html" %}
+{% block title %}店舗ログイン{% endblock %}
+{% block content %}
+
+<style>
+    /* ページ全体のスタイル */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    /* 中央揃えのコンテナ */
+    .container {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    /* ログアウトボタン */
+    .logout-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #FF4B4B;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .logout-button:hover {
+        background-color: #CC0000;
+    }
+
+    /* 見出しのスタイル */
+    h1 {
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 20px;
+        margin-top: 40px; /* 上部余白を調整 */
+        color: #333;
+    }
+
+    /* フォーム全体 */
+    form {
+        width: 100%;
+    }
+
+    /* 共通の入力フィールドとボタンのスタイル */
+    .input-field, .submit-button {
+        display: block;
+        width: 100%;
+        max-width: 350px;
+        padding: 10px;
+        margin: 10px auto; /* 中央揃え */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    /* ボタン特有のスタイル */
+    .submit-button {
+        width: 30%;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .submit-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* エラーメッセージ */
+    span, p.error {
+        color: red;
+        font-size: 12px;
+        text-align: center;
+    }
+</style>
+
+<div class="container">
+    <!-- ログアウトボタン -->
+    <form action="{{ url_for('auth_web.user_login') }}" method="post" novalidate>
+        <button class="logout-button" onclick="location.href='/auth/user_login'">ログアウト</button>
+    </form>
+
+    <!-- 見出し -->
+    <h1>カウンター専用カスハラ対策システム</h1>
+
+    <!-- ログインフォーム -->
+    <form action="{{ url_for('auth_web.shop_login') }}" method="post" novalidate>
+        {% for message in get_flashed_messages() %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+        {{ form.csrf_token }}
+        <p>
+            {{ form.shop_id.label }}
+            {{ form.shop_id(class="input-field", placeholder="ユーザーID") }}
+        </p>
+        {% for error in form.shop_id.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+        <p>
+            {{ form.password.label }}
+            {{ form.password(class="input-field", placeholder="パスワード") }}
+        </p>
+        {% for error in form.password.errors %}
+            <span>{{ error }}</span>
+        {% endfor %}
+        <p>
+            {{ form.submit(class="submit-button") }}
+        </p>
+    </form>
+</div>
+
+{% endblock %}
